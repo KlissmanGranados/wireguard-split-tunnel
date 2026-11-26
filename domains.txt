@@ -1,0 +1,50 @@
+# Dominios que deben ir por la VPN (split tunnel).
+#
+# Formato: un dominio, IP o CIDR por línea. Los comentarios con # se ignoran.
+#   - Dominio exacto:   api.example.com
+#   - Comodín:          *.example.com   o   *.example.com*
+#   - CIDR:             160.79.104.0/23
+#   - IP suelta:        1.2.3.4
+#
+# Los comodines se expanden probando subdominios habituales y, si está
+# disponible, consultando Certificate Transparency (Cert Spotter / crt.sh).
+# Vuelve a ejecutar update-split-tunnel.sh cuando cambien las IPs.
+
+# --- Anthropic / Claude ---
+claude.ai
+*.claude.ai
+anthropic.com
+*.anthropic.com
+claudeusercontent.com
+*.claudeusercontent.com
+
+# --- OpenAI / ChatGPT ---
+chatgpt.com
+*.chatgpt.com
+openai.com
+*.openai.com
+oaistatic.com
+*.oaistatic.com
+oaiusercontent.com
+*.oaiusercontent.com
+chatgpt.livekit.cloud
+*.chatgpt.livekit.cloud
+
+# --- Otros ---
+cual-es-mi-ip.net
+*.cual-es-mi-ip.net
+x.ai
+*.x.ai
+grok.com
+*.grok.com
+openjdk.org
+*.openjdk.org
+oracle.com
+*.oracle.com
+jetbrains.com
+*.jetbrains.com
+labs.jb.gg
+*.labs.jb.gg
+junie.jetbrains.com
+*.junie.jetbrains.com
+ingrazzio-cloud-prod.labs.jb.gg

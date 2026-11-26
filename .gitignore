@@ -1,0 +1,8 @@
+# WireGuard configs, private keys and local settings (never commit)
+*.conf
+confs/
+generated/
+settings.env
+
+# Local cache
+.cache/
