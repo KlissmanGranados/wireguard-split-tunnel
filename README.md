@@ -19,12 +19,50 @@ La idea es la misma que la del README de referencia: en WireGuard,
 ```bash
 ./vpn-cli.sh            # menú
 ./vpn-cli.sh use wg-US-FREE-10.conf && ./vpn-cli.sh apply
-./vpn-cli.sh up | down | status
+./vpn-cli.sh toggle | status
 ```
 
 Permite elegir el `.conf` de origen, el nombre de la conexión, la interfaz, el
 resolver DNS, el descubrimiento de subdominios y el autoconnect, y ejecuta
 generar + aplicar en un paso. Las preferencias se guardan en `settings.env`.
+
+### Referencia de comandos
+
+| Comando | Descripción |
+|---|---|
+| `menu` | Abre el menú interactivo (por defecto). |
+| `apply [--dry-run] [--verbose] [--refresh-discovery]` | Genera y aplica con los ajustes guardados. `--dry-run` solo genera (no toca NetworkManager); `--verbose` y `--refresh-discovery` se pasan a `update-split-tunnel.sh`. |
+| `up` | Conecta. |
+| `down` | Desconecta. |
+| `toggle` | Conecta si está inactiva, desconecta si está activa. |
+| `status` | Ajustes, estado de la conexión, entradas `AllowedIPs`, última generación, IP del túnel y cambios pendientes. |
+| `set KEY VALUE` | Cambia `name`, `iface`, `resolver`, `discover` o `autoconnect` (`on`/`off`). Sin argumentos muestra los ajustes. |
+| `edit` / `domains` | Edita `domains.txt` (`$VISUAL`/`$EDITOR`/`nano`); si cambió, ofrece aplicar. |
+| `verify` | Comprueba rutas: el primer dominio debe salir por el túnel y un host de control por fuera. Código de salida distinto de 0 si falla. |
+| `doctor` | Revisa herramientas requeridas y opcionales. |
+| `use FILE.conf` | Selecciona un `.conf` de `confs/`. |
+| `import PATH [--force]` | Copia un `.conf` a `confs/` y lo selecciona. Sin TTY exige `--force` para sobrescribir. |
+| `help` | Muestra la ayuda. |
+
+Teclas del menú (no distingue mayúsculas):
+
+| Grupo | Teclas |
+|---|---|
+| Ajustes | `c` .conf de origen, `n` nombre, `f` interfaz, `r` resolver DNS, `s` descubrimiento de subdominios, `o` autoconnect |
+| Acciones | `a` generar + aplicar, `u` conectar, `d` desconectar, `t` alternar, `v` verificar |
+| Archivos y herramientas | `e` editar dominios, `i` importar .conf, `x` borrar conexión, `h` doctor, `q` salir |
+
+**Pending:** tras un `apply` correcto se guarda una instantánea en
+`generated/.applied` (ajustes, hash de `domains.txt` y `.conf`). Si el estado
+actual difiere, `status` y el menú muestran `pending changes — run apply`;
+volver al valor aplicado quita el aviso. Renombrar la conexión ofrece mover la
+conexión existente en NetworkManager (renombrar, borrar o conservar).
+
+### Autocompletado
+
+```bash
+source completions/vpn-cli.bash     # p. ej. desde ~/.bashrc con la ruta completa
+```
 
 ### Dónde viven los archivos privados
 
@@ -35,6 +73,7 @@ permisos `700`/`600`. Se puede mover todo a otra carpeta con `WG_SPLIT_HOME`.
 ```
 vpn/
 ├── vpn-cli.sh      # menú
+├── completions/    # autocompletado bash (vpn-cli.bash)
 ├── scripts/        # generar y aplicar
 ├── domains.txt     # destinos
 ├── confs/          # .conf de origen: el CLI los lista para elegir (gitignored)
